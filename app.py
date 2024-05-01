@@ -10,6 +10,7 @@ def main():
     rows = [0,0,2,3,4,5,8,9,11]
     cols = [2,1,2,0,3,1,2,3,0]
     seating = lm.seatingChart(rows, cols)
+    name = "Alice"
 
     return render_template('index.html', 
         row1=seating[0],
@@ -23,7 +24,9 @@ def main():
         row9=seating[8],
         row10=seating[9],
         row11=seating[10],
-        row12=seating[11]
+        row12=seating[11],
+        eticket=lm.ticketNum(name),
+        totalSales=lm.salesTotal(seating)
         )
 
 if __name__ == '__main__':
