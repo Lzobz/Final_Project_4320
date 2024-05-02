@@ -4,6 +4,22 @@ import sqlite3
 app = Flask(__name__)
 app.config["DEBUG"] = True
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/index')
+def index():
+    return render_template('index.html')
+
+@app.route('/admin-login')
+def login():
+    return render_template('admin-login.html')
+
+@app.route('/reserve')
+def reserve():
+    return render_template('reserve.html')
+
 def admin_check(username, password):
     db_path = 'dbs/reservations.db'
     conn = sqlite3.connect(db_path)
@@ -13,6 +29,10 @@ def admin_check(username, password):
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
+    if request.form['menu'] == "/admin-login":
+        return render_template('admin-login.html')
+    if request.form['menu'] == "/reserve":
+        return render_template('reserve.html')
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
