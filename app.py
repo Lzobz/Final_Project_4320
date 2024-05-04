@@ -49,5 +49,24 @@ def main():
     else:
         return render_template('index.html')
 
+@app.route('/add_reservation', methods=['POST'])
+def add_reservation():
+    passenger_name = request.form['passenger_name']
+    seat_row = request.form['seat_row']
+    seat_column = request.form['seat_column']
+    e_ticket_number = request.form['e_ticket_number']
+
+    # Connect to the database
+    conn = sqlite3.connect('/reservations.db')
+    c = conn.cursor()
+
+    c.execute("INSERT INTO reservations (passengerName, seatRow, seatColumn, eTicketNumber) VALUES (?, ?, ?, ?)",
+              (passenger_name, seat_row, seat_column, e_ticket_number))
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('admin_dashboard'))
+
 if __name__ == '__main__':
     app.run(port=5000)
