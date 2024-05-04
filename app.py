@@ -69,6 +69,7 @@ def add_reservation():
     conn.commit()
     conn.close()
 
+    return redirect(url_for('reserve'))
     message = "Reservation was successful!"
     return render_template('reserve.html', message=message)
 
