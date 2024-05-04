@@ -1,3 +1,5 @@
+import sqlite3
+
 class loganMethods:
     def seatingChart(self, rows, cols):
         seats = [['O','O','O','O'] for row in range(12)]

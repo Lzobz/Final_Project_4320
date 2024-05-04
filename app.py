@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+from logan_methods import loganMethods
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -18,6 +19,7 @@ def login():
 
 @app.route('/reserve')
 def reserve():
+
     return render_template('reserve.html')
 
 def admin_check(username, password):
@@ -51,13 +53,14 @@ def main():
 
 @app.route('/add_reservation', methods=['POST'])
 def add_reservation():
-    passenger_name = request.form['passenger_name']
-    seat_row = request.form['seat_row']
-    seat_column = request.form['seat_column']
-    e_ticket_number = request.form['e_ticket_number']
+    lm = loganMethods()
+    passenger_name = request.form['first']
+    seat_row = request.form['row']
+    seat_column = request.form['column']
+    e_ticket_number = lm.ticketNum(request.form['first'])
 
     # Connect to the database
-    conn = sqlite3.connect('/reservations.db')
+    conn = sqlite3.connect('dbs/reservations.db')
     c = conn.cursor()
 
     c.execute("INSERT INTO reservations (passengerName, seatRow, seatColumn, eTicketNumber) VALUES (?, ?, ?, ?)",
@@ -66,7 +69,8 @@ def add_reservation():
     conn.commit()
     conn.close()
 
-    return redirect(url_for('admin_dashboard'))
+    message = "Reservation was successful!"
+    return render_template('reserve.html', message=message)
 
 if __name__ == '__main__':
     app.run(port=5000)
