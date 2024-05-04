@@ -1,1 +1,52 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {background-color: grey;}
+        h1{text-align: center;}
+        h2{text-align: center;}
+        form{text-align: center;}
+       
+        </style>
+    <title>Reserve</title>
+</head>
+<body>
+    <li><a href="/index">Home</a></li>
+    <li><a href="/admin-login">Admin</a></li>
+    <li><a href="/reserve">reserve</a></li>
+    <form action="/" method="post">
+    <h1>Reserve your seat </h1>
+    <p1>seating chart</p1><br>
+    <p2>X = reserved seat O = avaible seat</p2><br>
+    <label for="first">First name:</label><br>
+            <input type="text" id="first" name="first" value=""><br>
+            <label for="last">Last name:</label><br>
+            <input type="text" id="last" name="last" value=""><br><br>
+            <label for="row">Select row</label>
+            <select id="row" name="row">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select><br>
+            <label for="column">Select column</label>
+            <select id="column" name="column">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select><br>
+            <input type="submit" value="Confirm">
+    </form>
+</body>
+</html>
