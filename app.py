@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -23,26 +23,31 @@ def reserve():
 def admin_check(username, password):
     db_path = 'dbs/reservations.db'
     conn = sqlite3.connect(db_path)
-    result = conn.execute("SELECT * FROM admins WHERE username = ? AND password = ?", (username, password)).fetchone()
+    result = conn.execute("SELECT * FROM admins WHERE username =? AND password =?", (username, password)).fetchone()
     conn.close() 
     return result
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['POST'])
 def main():
-    if request.form['menu'] == "/admin-login":
-        return render_template('admin-login.html')
-    if request.form['menu'] == "/reserve":
-        return render_template('reserve.html')
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if admin_check(username, password):
-            return render_template('admin.html')
+        menu_option = request.form.get('menu')
+        if menu_option:
+            if menu_option == "/admin-login":
+                return redirect(url_for('login'))
+            elif menu_option == "/reserve":
+                return redirect(url_for('reserve'))
+            else:
+                return "Invalid menu option", 400
         else:
-            message = "Invalid username or password."
-        return render_template('admin-login.html', message=message)
+            username = request.form.get('username')
+            password = request.form.get('password')
+            if admin_check(username, password):
+                return render_template('admin.html')
+            else:
+                message = "Invalid username or password."
+                return render_template('admin-login.html', message=message)
     else:
-        return render_template('admin-login.html')
+        return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(port=5000)

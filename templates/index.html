@@ -1,12 +1,31 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Search</title>
+    <style>
+        body {background-color: gray;}
+        h1{text-align: center;}
+        h2{text-align: center;}
+        form{text-align: center;}
+    </style>
+    <title>IT 4320 Trip Reservation System</title>
 </head>
 <body>
-    <h1>Reservation System - Final Project</h1>
-
+    <ul>
+        <li><a href="/index">Home</a></li>
+        <li><a href="/admin-login">Admin</a></li>
+        <li><a href="/reserve">Reserve</a></li>
+    </ul>
+    <h1>Welcome to the IT 4320 Trip reservation system please select whether you need to make a reservation or login as admin </h1>
+    <h2>Choose a menu option</h2>
+    <form action="/" method="post">
+        <select id="menu" name="menu">
+            <option value="/admin-login">Admin</option>
+            <option value="/reserve">Reservation</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
