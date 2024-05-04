@@ -66,7 +66,7 @@ def add_reservation():
     conn.commit()
     conn.close()
 
-    return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('reserve'))
 
 if __name__ == '__main__':
     app.run(port=5000)
