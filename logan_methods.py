@@ -1,10 +1,24 @@
 import sqlite3
 
 class loganMethods:
-    def seatingChart(self, rows, cols):
+    def seatingChart(self):
         seats = [['O','O','O','O'] for row in range(12)]
         count = 0
-        for x in rows:            
+        rows=[]
+        cols=[]
+        
+        conn = sqlite3.connect('dbs/reservations.db')
+        c = conn.cursor()
+        c.execute("SELECT seatRow FROM reservations")
+        for x in c.fetchall():
+            rows.append(x[0])
+
+        c.execute("SELECT seatColumn FROM reservations")
+        for x in c.fetchall():
+            cols.append(x[0])
+        conn.close()
+
+        for x in rows:          
             seats[x][cols[count]] = 'X'
             count+=1
 

@@ -18,7 +18,9 @@
     <li><a href="/reserve">reserve</a></li>
     <form action="/add_reservation" method="post">
     <h1>Reserve your seat </h1>
-    <p1>{{seating_chart}}</p1><br>
+    {% for row in rows %}
+    <p>{{ row }}</p>
+    {% endfor %}<br>
     <p2>X = reserved seat O = avaible seat</p2><br>
     <label for="first">First name:</label><br>
             <input type="text" id="first" name="first" value=""><br>
@@ -47,7 +49,7 @@
                 <option value="4">4</option>
             </select><br>
             <input type="submit" value="Confirm">
-            <p>{{message}}</p>
+            <p1>{{message}}</p1>
     </form>
 </body>
 </html>

@@ -19,8 +19,9 @@ def login():
 
 @app.route('/reserve')
 def reserve():
-
-    return render_template('reserve.html')
+    lm = loganMethods()
+    seating = lm.seatingChart()
+    return render_template('reserve.html', rows=seating)
 
 def admin_check(username, password):
     db_path = 'dbs/reservations.db'
@@ -44,7 +45,9 @@ def main():
             username = request.form.get('username')
             password = request.form.get('password')
             if admin_check(username, password):
-                return render_template('admin.html')
+                lm = loganMethods()
+                seating = lm.seatingChart()
+                return render_template('admin.html', rows=seating, sales_total=lm.salesTotal(seating))
             else:
                 message = "Invalid username or password."
                 return render_template('admin-login.html', message=message)
@@ -54,23 +57,53 @@ def main():
 @app.route('/add_reservation', methods=['POST'])
 def add_reservation():
     lm = loganMethods()
+    seating = lm.seatingChart()
+    rows=[]
+    cols=[]
+    count = 0
+    isTaken = False
+
     passenger_name = request.form['first']
-    seat_row = request.form['row']
-    seat_column = request.form['column']
+    seat_row = str(int(request.form['row']) - 1)
+    seat_column = str(int(request.form['column']) - 1)
     e_ticket_number = lm.ticketNum(request.form['first'])
+
+    if passenger_name == "":
+        return render_template('reserve.html', rows=seating, message="Please enter a first name.")
 
     # Connect to the database
     conn = sqlite3.connect('dbs/reservations.db')
     c = conn.cursor()
+               
+    c.execute("SELECT seatRow FROM reservations")
+    for x in c.fetchall():
+        rows.append(x[0])
+    print(rows)
+    c.execute("SELECT seatColumn FROM reservations")
+    for x in c.fetchall():
+        cols.append(x[0])
+    print(cols)
 
-    c.execute("INSERT INTO reservations (passengerName, seatRow, seatColumn, eTicketNumber) VALUES (?, ?, ?, ?)",
-              (passenger_name, seat_row, seat_column, e_ticket_number))
+    for x in rows:
+        if x == int(seat_row):
+            if cols[count] == int(seat_column):
+                isTaken = True
+                print('test')
+        count+=1
 
-    conn.commit()
-    conn.close()
+    if isTaken == True:
+        conn.close()
+        return render_template('reserve.html', rows=seating,message="Seat is taken, please choose another.")
+    else:
+        c.execute("INSERT INTO reservations (passengerName, seatRow, seatColumn, eTicketNumber) VALUES (?, ?, ?, ?)",
+        (passenger_name, seat_row, seat_column, e_ticket_number))
+        conn.commit()
+        conn.close()
 
-    message = "Reservation was successful!"
-    return render_template('reserve.html', message=message)
+    seating = lm.seatingChart()
+
+    message = "Reservation was successful! Your reservation number is " + e_ticket_number
+    return render_template('reserve.html', rows=seating, message=message)
 
 if __name__ == '__main__':
     app.run(port=5000)
